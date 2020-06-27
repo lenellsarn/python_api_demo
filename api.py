@@ -21,7 +21,7 @@ def rawdocs():
 
 documentation_v1["/api/v1/tasks-today"] = "Returns todays scehduled tasks"
 @app.route('/api/v1/tasks-today', methods=['GET'])
-def api_all():
+def api_tasks_today():
     return jsonify(data.getbooks())
 
 documentation_v1["/api/v1/tasks-future/{count}"] = "Returns the specified number of tasks for the future"
@@ -33,9 +33,10 @@ def api_tasks_count():
         return "Error: No id field provided. Please specify an id."
 
     results = []
-    for book in data.getbooks():
-        if book['id'] == id:
+    for book in data.getbooks(count):
+        if book['count'] == count:
             results.append(book)
 
     return jsonify(results)
 app.run()
+ 
