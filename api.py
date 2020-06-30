@@ -9,7 +9,7 @@ documentation_v1 = {}
 
 @app.route('/', methods=['GET'])
 def home():
-    return render_template("index.html")
+    return render_template("html/start.html")
 
 @app.route('/api-v1', methods=['GET'])
 def docs():
@@ -21,8 +21,8 @@ def rawdocs():
 
 documentation_v1["/api/v1/tasks-today"] = "Returns todays scehduled tasks"
 @app.route('/api/v1/tasks-today', methods=['GET'])
-def api_tasks_today():
-    return jsonify(data.getbooks())
+def api_tasks_today():  
+    return jsonify(data.getDailyTasks())
 
 documentation_v1["/api/v1/tasks-future/{count}"] = "Returns the specified number of tasks for the future"
 @app.route('/api/v1/tasks-future', methods=['GET'])
@@ -33,10 +33,10 @@ def api_tasks_count():
         return "Error: No id field provided. Please specify an id."
 
     results = []
-    for book in data.getbooks(count):
+    for book in results:
         if book['count'] == count:
             results.append(book)
 
     return jsonify(results)
-app.run()
- 
+
+app.run(debug=True)
