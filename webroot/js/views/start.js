@@ -1,23 +1,29 @@
 
 
 $(document).ready(function () {
-    function getDailyTasksOnSuccess(days) {
+    function getTasksOnSuccess(tasks, id) {
 
-        var contentContainer = $('#content');
-        var iteration = 0;
+        var contentContainer = $(id);
 
-        for (var day in days) {
-            for (var task in days[day]) {
+        for (var iteration in tasks) {
 
+            var task = tasks[iteration]
+            var templateContainerId = 'template-container-' + task.id++;
+            var templateContainer = '<div id="' + templateContainerId + '"</div>'
+            contentContainer.append(templateContainer);
 
-                var templateContainerId = 'template-container-' + iteration++;
-                var templateContainer = '<div id="' + templateContainerId + '"</div>'
-                contentContainer.append(templateContainer);
-
-                $('#' + templateContainerId).loadTemplate("webroot/js/templates/daily-task-template.html", days[day][task]);
-            }
+            $('#' + templateContainerId).loadTemplate("webroot/js/templates/daily-task-template.html", task);
         }
     }
+    
+    function today(tasks){
+        getTasksOnSuccess(tasks, "#today")
+    }    
+    
+    function tomorrow(tasks){
+        getTasksOnSuccess(tasks, "#tomorrow")
+    }
 
-    $.get('/api/v1/tasks-today', getDailyTasksOnSuccess);
+    $.get('/api/v1/tasks-today', today);
+    $.get('/api/v1/tasks-future?count=3', tomorrow);
 });

@@ -1,6 +1,6 @@
 import flask
 from flask import request, jsonify, render_template
-import data
+from services import scheduleService
 
 app = flask.Flask(__name__, template_folder="webroot", static_folder="webroot")
 app.config["DEBUG"] = True
@@ -22,7 +22,7 @@ def rawdocs():
 documentation_v1["/api/v1/tasks-today"] = "Returns todays scehduled tasks"
 @app.route('/api/v1/tasks-today', methods=['GET'])
 def api_tasks_today():  
-    return jsonify(data.getDailyTasks())
+    return jsonify(scheduleService.getTodaysTasks())
 
 documentation_v1["/api/v1/tasks-future/{count}"] = "Returns the specified number of tasks for the future"
 @app.route('/api/v1/tasks-future', methods=['GET'])
@@ -32,11 +32,7 @@ def api_tasks_count():
     else:
         return "Error: No id field provided. Please specify an id."
 
-    results = []
-    for book in results:
-        if book['count'] == count:
-            results.append(book)
-
-    return jsonify(results)
+    tasks = scheduleService.getFutureTasks()
+    return jsonify(tasks)
 
 app.run(debug=True)
